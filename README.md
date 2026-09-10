@@ -1,0 +1,63 @@
+# PashuRaksha — SIH26128 Production MVP
+
+A polished Streamlit prototype for livestock-health surveillance and decision support.
+
+## UI/UX update
+- Top navigation bar; no sidebar.
+- New Home landing page designed for a judge/demo flow.
+- Light animated healthcare background with floating ambient orbs.
+- Explicit dark-green typography so content remains readable even when the host browser/Streamlit theme is dark.
+- Consistent glass cards, rounded controls, hover motion, badges and workflow timelines across every module.
+- Integrations, governance, offline sync and exports use visual operational cards instead of raw JSON/plain text.
+
+## Integrations
+`integrations.py` is intentionally an adapter/readiness layer. It does not claim live access to government systems. It checks whether authorised deployment URLs/tokens are configured and provides a safe extension point for approved APIs.
+
+## Run
+```bash
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+Demo accounts:
+- `admin / admin123`
+- `vet / vet123`
+- `field / field123`
+- `farmer / farmer123`
+
+## Production note
+This prototype provides surveillance prioritisation, not veterinary diagnosis. Production deployment requires approved data sources, veterinary validation, security review, data-sharing agreements and monitoring.
+
+
+## Governance AI risk analysis
+
+The Governance module now includes a prototype **Random Forest surveillance-risk predictor**. It reads the structured reports stored in `data/pashuraksha.db` and uses herd impact, deaths, symptoms, rainfall, temperature, humidity, nearby-report count, vaccination coverage, and species to predict `LOW`, `MEDIUM`, `HIGH`, or `CRITICAL` surveillance risk.
+
+The transparent `triage.py` rule engine remains the baseline. Governance displays both the rule result and the ML prediction, confidence, probability distribution, and strongest model features so a veterinarian can review disagreements.
+
+**Important:** this is a prototype decision-support model. The bundled training scenarios are synthetic/rule-derived because the project does not contain a validated clinical labelled dataset. It must not be presented as a clinically validated disease-diagnosis model. For production, replace the synthetic training source with approved labelled surveillance data and validate performance by species and district.
+
+## Role-based demo accounts
+- District Admin: `admin` / `admin123`
+- Veterinarian: `vet` / `vet123`
+- Field Worker: `field` / `field123`
+- Farmer: `farmer` / `farmer123`
+
+## Role-specific navigation
+- Farmer: Home, Report Case, Animal Registry, Health Records, Alerts, Offline Sync
+- Field Worker: Home, Report Case, Dashboard, Animal Registry, Health Records, Vet/clinical hand-off via Lab Referral, Alerts, Offline Sync
+- Veterinarian: Home, Report Case, Dashboard, Animal Registry, Health Records, Vet Review, Lab Referral, Alerts, Governance, Offline Sync, Exports
+- District Admin: Home, Report Case, Dashboard, Animal Registry, Health Records, Lab Referral, Alerts, Integrations, Governance, Offline Sync, Exports
+
+## End-to-end demo test
+1. Login as `farmer`; submit a high-signal report (e.g. 20 cattle, 10 sick, 2 deaths, fever + oral lesions + salivation, rainfall 30mm, humidity 90%, vaccination gap via Village C).
+2. Login as `vet`; open **Vet Review**, select the report, compare rule risk and AI prediction, then save veterinary verification.
+3. Open **Governance**; show the Random Forest prediction, confidence, report-level analysis and the new `VERIFY_REPORT` audit event.
+4. Open **Lab Referral** and create a sample referral for the case.
+5. Login as `admin`; open **Dashboard**, **Governance**, **Exports** and **Integrations** to demonstrate district oversight.
+6. Login as `field`; open **Offline Sync**, queue a Health report event, then show it in the queue and Governance audit trail.
+7. Return to `farmer`; open **Alerts** to demonstrate role-specific read-only advisory access.
+
+## AI disclosure
+The prototype Random Forest model is trained on synthetic/rule-derived surveillance scenarios and optionally stored prototype reports. It predicts surveillance priority, not disease diagnosis. Production deployment requires validated, labelled field/laboratory data and veterinary/public-health validation.
+# PashuRaksha-SIH26128-
