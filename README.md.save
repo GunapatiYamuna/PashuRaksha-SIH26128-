@@ -1,4 +1,4 @@
-# PashuRaksha — SIH26128 Production MVP
+ PashuRaksha — SIH26128 Production MVP
 
 A polished Streamlit prototype for livestock-health surveillance and decision support.
 
@@ -60,3 +60,7 @@ The transparent `triage.py` rule engine remains the baseline. Governance display
 
 ## AI disclosure
 The prototype Random Forest model is trained on synthetic/rule-derived surveillance scenarios and optionally stored prototype reports. It predicts surveillance priority, not disease diagnosis. Production deployment requires validated, labelled field/laboratory data and veterinary/public-health validation.
+<<<<<<< HEAD
+# PashuRaksha-SIH26128-
+=======
+>>>>>>> f81ad73 (first commit)

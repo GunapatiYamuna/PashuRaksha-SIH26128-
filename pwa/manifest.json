@@ -1,0 +1,9 @@
+{
+  "name": "PashuRaksha Offline Reporter",
+  "short_name": "PashuRaksha",
+  "start_url": "index.html",
+  "display": "standalone",
+  "theme_color": "#123a2b",
+  "background_color": "#f5faf7",
+  "icons": []
+}

@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#123a2b">
+<title>PashuRaksha Offline Reporter</title>
+<style>body{font-family:system-ui;margin:0;background:#f5faf7;color:#17352a}main{max-width:680px;margin:auto;padding:24px}.card{background:#fff;padding:20px;border-radius:20px;box-shadow:0 8px 30px #0000000d}textarea,input,select,button{width:100%;box-sizing:border-box;padding:12px;margin:6px 0;border:1px solid #d8e7dd;border-radius:10px}button{background:#1f7a55;color:#fff;font-weight:700;border:0}.status{padding:10px;background:#edf7f0;border-radius:10px}</style></head>
+<body><main><div class="card"><div style="font-size:42px">🐾</div><h1>PashuRaksha Offline Reporter</h1><p>Capture a field report without internet. Records remain on this device until connectivity returns.</p><div class="status" id="net"></div>
+<label>Village</label><input id="village" value="Village A"><label>Species</label><select id="species"><option>Cattle</option><option>Buffalo</option><option>Goat</option><option>Sheep</option><option>Poultry</option></select>
+<label>Affected animals</label><input id="sick" type="number" value="1"><label>Deaths</label><input id="deaths" type="number" value="0"><label>Symptoms</label><textarea id="symptoms">Fever</textarea><button onclick="save()">Save offline</button><button onclick="sync()" style="background:#285c48">Sync queued reports</button><pre id="out"></pre></div></main>
+<script>
+const K="pashuraksha_queue_v2"; const q=()=>JSON.parse(localStorage.getItem(K)||"[]");
+function status(){net.textContent=navigator.onLine?"🟢 Online — ready to sync":"🔴 Offline — saved locally";} addEventListener("online",status);addEventListener("offline",status);status();
+function save(){let a=q();a.push({event_id:"EVT-"+Date.now(),created_at:new Date().toISOString(),gps:null,payload:{type:"health_report",village:village.value,species:species.value,sick:+sick.value,deaths:+deaths.value,symptoms:symptoms.value}});localStorage.setItem(K,JSON.stringify(a));render();alert("Saved on this device.");}
+function render(){out.textContent=JSON.stringify(q(),null,2)} function sync(){if(!navigator.onLine){alert("Still offline.");return} alert("Demo sync complete. Connect this client to the /sync API in production.");} render();
+if("serviceWorker"in navigator) navigator.serviceWorker.register("sw.js");
+</script></body></html>
